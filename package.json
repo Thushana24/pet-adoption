@@ -1,0 +1,31 @@
+{
+  "name": "pet-adoption",
+  "version": "0.1.0",
+  "private": true,
+  "scripts": {
+    "dev": "next dev --turbopack",
+    "build": "next build",
+    "start": "next start",
+    "lint": "next lint",
+    "create-diff:win": "@powershell -Command \"git diff --cached -- . ':^node_modules' ':^package-lock.json' ':^src/app/fonts' ':^public' | Out-File -FilePath $env:USERPROFILE\\Desktop\\diff.txt; git ls-files --others --exclude-standard ':!node_modules/*' ':!package-lock.json' ':!src/app/fonts/*' ':!public/*' | ForEach-Object { Write-Output ('+++ ' + $_); Get-Content $_ } | Out-File -FilePath $env:USERPROFILE\\Desktop\\diff.txt -Append\"",
+    "create-diff:mac": "{ git diff -- . ':(exclude)node_modules' ':(exclude)package-lock.json' ':(exclude)src/app/fonts' ':(exclude)public' && git ls-files --others --exclude-standard ':!node_modules/*' ':!package-lock.json' ':!src/app/fonts/*' ':!public/*' | while read file; do echo \"+++ $file\"; cat \"$file\"; done; } > ~/Desktop/diff.txt",
+    "migrate": "npx prisma db push && npx prisma generate"
+  },
+  "dependencies": {
+    "next": "15.4.5",
+    "postcss": "^8.5.6",
+    "react": "19.1.0",
+    "react-dom": "19.1.0"
+  },
+  "devDependencies": {
+    "@eslint/eslintrc": "^3",
+    "@tailwindcss/postcss": "^4.1.11",
+    "@types/node": "^20",
+    "@types/react": "^19",
+    "@types/react-dom": "^19",
+    "eslint": "^9",
+    "eslint-config-next": "15.4.5",
+    "tailwindcss": "^4.1.11",
+    "typescript": "^5"
+  }
+}
