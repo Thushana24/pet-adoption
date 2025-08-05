@@ -1,7 +1,7 @@
 // app/register/page.tsx
 
-import { RegisterForm } from "./RegisterForm";
 import { MdPets } from "react-icons/md";
+import { LoginForm } from "./LoginForm";
 
 export default function RegisterPage() {
   return (
@@ -45,16 +45,16 @@ export default function RegisterPage() {
             </div>
             {/* right side */}
             <p className="text-xs font-medium text-gray-800 dark:text-white/60">
-              Already have an account?{" "}
-              <a className="text-violet-900 hover:underline " href="/login">
-                Login
+              Don{"'"}t have an account?{" "}
+              <a className="text-violet-900 hover:underline " href="/sign-up">
+                Sign-up
               </a>
             </p>
           </header>
 
           {/* Scrollable Content */}
           <div className="flex-1 overflow-y-auto px-5">
-            <RegisterForm />
+            <LoginForm />
           </div>
 
           {/* Sticky Footer */}
