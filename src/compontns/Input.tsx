@@ -48,9 +48,9 @@ const Input = forwardRef<HTMLInputElement, IInput>(
 
     const variantClasses = {
       default:
-        "border-gray-300 focus:ring-[#adb5bd] focus:border-[#adb5bd] text-gray-800 dark:text-white ",
+        "border-gray-300   focus:ring-violet-700 focus:border-violet-700 text-gray-800 dark:text-white ",
       error:
-        "border-gray-300 focus:ring-[#adb5bd] focus:border-[#adb5bd] text-gray-800 dark:text-white ",
+        "border-gray-300 focus:ring-[#adb5bd] focus:border-[#adb5bd] text-gray-600 dark:text-white ",
       success:
         "border-green-500 focus:ring-green-500 focus:border-green-500 text-green-900 bg-green-50",
       warning:
@@ -59,8 +59,8 @@ const Input = forwardRef<HTMLInputElement, IInput>(
 
     const iconColorClasses = {
       default:
-        "text-gray-600 peer-focus:text-gray-800 dark:text-gray-400  dark:peer-focus:text-[white]",
-      error: "text-gray-400 peer-focus:text-[#adb5bd]",
+        "text-gray-600 peer-focus:text-violet-700 dark:text-gray-400  dark:peer-focus:text-[white]",
+      error: "text-gray-600  tracking-wide peer-focus:text-600",
       success: "text-green-500",
       warning: "text-yellow-500",
     };
@@ -93,7 +93,7 @@ const Input = forwardRef<HTMLInputElement, IInput>(
             ref={ref}
             id={inputId}
             className={cn(
-              "peer w-full rounded-lg  font-medium transition-all duration-500 ease-in-out focus:ring-1 focus:ring-offset-1 focus:outline-0 bg-gray-700/10  dark:bg-white/10",
+              "peer w-full rounded-tl-xl rounded-br-xl border font-medium transition-all duration-500 ease-in-out focus:ring-1 right-1 focus:outline-0 bg-gray-700/10  dark:bg-white/10",
               sizeClasses[size],
               variantClasses[currentVariant],
               hasLeftIcon && "pl-10",

@@ -24,8 +24,8 @@ const Button = forwardRef<HTMLButtonElement, ButtonProps>(
             aria-busy={loading}
             aria-live="polite"
             className={cn(
-              "relative flex w-full items-center justify-center overflow-hidden rounded-xl px-5 py-3 text-sm font-medium ring-[#e85d04] ring-offset-2 ring-offset-inherit outline-none select-none",
-              "bg-[#e85d04] text-white transition-colors duration-300 ease-in-out hover:bg-[#dc2f02] dark:bg-[#d00000]",
+              "relative flex w-full items-center justify-center overflow-hidden rounded-tr-xl rounded-bl-xl px-5 py-3 text-sm font-medium ring-lime-600 ring-offset-2 ring-offset-inherit outline-none select-none",
+              "bg-lime-600 text-white transition-colors duration-300 ease-in-out hover:bg-green-600 dark:bg-[#d00000]",
               "focus:outline-none data-[focus-visible]:ring-2",
               "cursor-pointer",
               "disabled:cursor-not-allowed disabled:bg-gray-400 disabled:text-gray-600",
