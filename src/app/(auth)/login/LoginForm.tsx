@@ -2,35 +2,39 @@
 
 import React, { useState } from "react";
 import { IoFingerPrintOutline } from "react-icons/io5";
-import { Lock, EyeOff, Eye, Mail, User } from "lucide-react";
+import { User, Lock, EyeOff, Eye } from "lucide-react";
 import { useForm } from "react-hook-form";
-import { RegisterInput } from "../api/auth/types";
+import { LoginInput } from "../../api/auth/types";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { RegisterUserSchema } from "@/schemas/user.schema";
+import { LoginUserSchema } from "@/schemas/user.schema";
 import { useRouter } from "next/navigation";
 import { useAuthActions } from "@/stores/authStore";
 import Cookie from "js-cookie";
 import cookieKeys from "@/config/cookieKeys";
-import { useRegister } from "../api-clients/register/useRegister";
+import { useLogin } from "../../api-clients/login/useLogin";
 import Input from "@/compontns/Input";
 import Button from "@/compontns/Button";
+import { toast } from "react-toastify";
+import { AxiosError } from "axios";
+import { CustomError } from "../../api/auth/helpers/handleError";
 
-export const RegisterForm = () => {
+export const LoginForm = () => {
   const router = useRouter();
   const { setUser, setAuthToken } = useAuthActions();
   const [showPassword, setShowPassword] = useState(false);
-  const [showConfirmPassword, setShowConfirmPassword] = useState(false);
+  const [loginError, setLoginError] = useState("");
 
   const {
     handleSubmit,
     register,
+    reset,
     formState: { errors, isSubmitting },
-  } = useForm<RegisterInput>({
+  } = useForm<LoginInput>({
     mode: "onSubmit",
-    resolver: zodResolver(RegisterUserSchema),
+    resolver: zodResolver(LoginUserSchema),
   });
 
-  const { mutateAsync: registerUser } = useRegister({
+  const { mutateAsync: login } = useLogin({
     invalidateQueryKey: [],
   });
 
@@ -47,48 +51,46 @@ export const RegisterForm = () => {
 
         {/* Title */}
         <h2 className="mt-5 text-center text-3xl font-bold text-gray-800 dark:text-white">
-          Create your account
+          Welcome back
         </h2>
         <p className="mt-1 text-center text-xs text-gray-600 dark:text-white/60">
-          Paws up! Your new best friend is waiting
+          Sign in to your account to continue
         </p>
       </div>
 
       {/* Form */}
       <div className="mt-10 w-full max-w-sm">
         <form
-          className="flex  w-full flex-col space-y-2"
+          className="flex w-full flex-col space-y-5"
           onSubmit={handleSubmit(async (values) => {
-            const {
-              data: { user, token },
-            } = await registerUser({
-              body: values,
-            });
+            setLoginError("");
+            try {
+              const {
+                data: { user, token },
+              } = await login({
+                body: values,
+              });
 
-            setUser(user);
-            setAuthToken(token);
+              setUser(user);
+              setAuthToken(token);
 
-            Cookie.set(cookieKeys.USER_TOKEN, token);
-            Cookie.set(cookieKeys.USER, JSON.stringify(user));
-            router.push("/");
+              Cookie.set(cookieKeys.USER_TOKEN, token);
+              Cookie.set(cookieKeys.USER, JSON.stringify(user));
+
+              router.push("/dashboard");
+            } catch (error) {
+              const err = error as AxiosError;
+              const errObject = err.response?.data as CustomError;
+              const message = errObject.error.message;
+              toast.error(message);
+
+              reset();
+            }
           })}
         >
           <Input
-            placeholder="First Name"
+            placeholder="Enter your username"
             leftIcon={User}
-            error={errors.firstName?.message}
-            {...register("firstName")}
-          />
-
-          <Input
-            placeholder="First Name"
-            leftIcon={User}
-            error={errors.lastName?.message}
-            {...register("lastName")}
-          />
-          <Input
-            placeholder="Enter your email"
-            leftIcon={Mail}
             error={errors.email?.message}
             {...register("email")}
           />
@@ -97,7 +99,7 @@ export const RegisterForm = () => {
             type={showPassword ? "text" : "password"}
             placeholder="Enter your password"
             leftIcon={Lock}
-            error={errors.password?.message}
+            error={errors.password?.message || loginError}
             rightIcon={
               <button
                 type="button"
@@ -114,28 +116,7 @@ export const RegisterForm = () => {
             {...register("password")}
           />
 
-          <Input
-            type={showConfirmPassword ? "text" : "password"}
-            placeholder="Confirm your password"
-            leftIcon={Lock}
-            error={errors.confirmPassword?.message}
-            rightIcon={
-              <button
-                type="button"
-                onClick={() => setShowConfirmPassword((prev) => !prev)}
-                className="focus:outline-none"
-              >
-                {showConfirmPassword ? (
-                  <EyeOff className="h-4 w-4" />
-                ) : (
-                  <Eye className="h-4 w-4" />
-                )}
-              </button>
-            }
-            {...register("confirmPassword")}
-          />
-
-          <Button loading={isSubmitting}>Sign up</Button>
+          <Button loading={isSubmitting}>Login</Button>
 
           <div className="flex items-center justify-center gap-2">
             <div className="w-full border-t border-gray-300 dark:border-white/10"></div>

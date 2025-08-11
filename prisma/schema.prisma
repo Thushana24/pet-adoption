@@ -18,6 +18,7 @@ model User {
   firstName String
   lastName  String
   email     String @unique
+  contact   String
   password  String
 
   pets Pet[] @relation("PetOwner")
@@ -28,11 +29,9 @@ model User {
 
 model Pet {
   id          String @id @default(auto()) @map("_id") @db.ObjectId
-  name        String
   age         String
   color       String
   description String
-  contact     String
 
   isForAdoption Boolean @default(true)
   isForSale     Boolean @default(false)
@@ -47,27 +46,9 @@ model Pet {
   ownerId String? @db.ObjectId
   owner   User?   @relation(name: "PetOwner", fields: [ownerId], references: [id])
 
-  petTypeId String?  @db.ObjectId
-  petType   PetType? @relation(fields: [petTypeId], references: [id])
-
-  breedId String? @db.ObjectId
-  breed   Breed?  @relation(fields: [breedId], references: [id])
+  type  String
+  breed String
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
-}
-
-model PetType {
-  id     String  @id @default(auto()) @map("_id") @db.ObjectId
-  name   String  @unique
-  pets   Pet[]
-  breeds Breed[]
-}
-
-model Breed {
-  id        String  @id @default(auto()) @map("_id") @db.ObjectId
-  name      String  @unique
-  petTypeId String  @db.ObjectId
-  petType   PetType @relation(fields: [petTypeId], references: [id])
-  pets      Pet[]
 }
